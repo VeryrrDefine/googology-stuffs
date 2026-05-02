@@ -36,8 +36,8 @@ class AdditionalTerm {
     for (let i = 0; i < newterm.length; i++) {
       if (newterm[i] == 1) {
         last1 = i;
-      } else if (newterm[last1 + 1] instanceof Spliter) {
-        i++;
+      } else if (newterm[i] instanceof Spliter) {
+        continue;
       } else {
         break;
       }
@@ -148,7 +148,7 @@ let man = new MyArrayNotation();
 man.base = 2;
 man.exponent = 2;
 man.additionalTerm = new AdditionalTerm();
-man.additionalTerm.terms = [1, new Spliter(new AdditionalTerm(1)), 2];
+man.additionalTerm.terms = [1, new Spliter(new AdditionalTerm(1)), 1, 2];
 
 let man1: MyArrayNotation = man;
 let res: any = NaN;
