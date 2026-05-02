@@ -1,6 +1,20 @@
 export type MANNumber = MyArrayNotation | number;
+class Spliter {
+  inner: AdditionalTerm;
+  constructor(inner: AdditionalTerm) {
+    this.inner = inner;
+  }
+  toString() {
+    return `(${this.inner})`;
+  }
+}
 class AdditionalTerm {
-  terms: MANNumber[] = [];
+  terms: (MANNumber | Spliter)[] = [];
+  constructor(x?: number) {
+    if (x !== undefined) {
+      this.terms = [x];
+    }
+  }
   clone() {
     let x = new AdditionalTerm();
     x.terms = Array.from(this.terms);
@@ -22,20 +36,27 @@ class AdditionalTerm {
     for (let i = 0; i < newterm.length; i++) {
       if (newterm[i] == 1) {
         last1 = i;
+      } else if (newterm[last1 + 1] instanceof Spliter) {
+        i++;
       } else {
         break;
       }
     }
-    if (last1 == newterm.length - 1) throw new Error("Executed Term is all 1");
+    if (last1 >= newterm.length - 1) throw new Error("Executed Term is all 1");
     // {1,1,1...,1,2}
     // {1,1,1...,10,1}
 
     newterm[last1] = x;
-    newterm[last1 + 1] = substract(newterm[last1 + 1]);
-    let n = new AdditionalTerm();
-    n.terms = newterm;
 
-    return n;
+    if (newterm[last1 + 1] instanceof Spliter) {
+      throw new Error("Not Implemented");
+    } else {
+      newterm[last1 + 1] = substract(newterm[last1 + 1] as MANNumber);
+      let n = new AdditionalTerm();
+      n.terms = newterm;
+
+      return n;
+    }
   }
 }
 function substract(x: MANNumber) {
@@ -89,6 +110,8 @@ export class MyArrayNotation {
       outside.exponent = D(outside.exponent);
       return outside;
     }
+    if (this.additionalTerm.terms[0] instanceof Spliter)
+      throw new Error("Cannot calculate");
     let z = substract(this.additionalTerm.terms[0]);
     if (z == 0) {
       let outside = new MyArrayNotation();
@@ -125,7 +148,7 @@ let man = new MyArrayNotation();
 man.base = 2;
 man.exponent = 2;
 man.additionalTerm = new AdditionalTerm();
-man.additionalTerm.terms = [2, 3, 5, 7, 9, 12];
+man.additionalTerm.terms = [1, new Spliter(new AdditionalTerm(1)), 2];
 
 let man1: MyArrayNotation = man;
 let res: any = NaN;
