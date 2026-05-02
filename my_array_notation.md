@@ -25,6 +25,8 @@ Additional Terms一般形如$1,2,3,4,5,6$，每一项都是正整数。
 
 有一些基础规则，以下用$P$表示非空的Additional Term,$Q$表示任意Additional Term,$x$,$y$,$z$表示正整数。
 
+我的`myarraynotation-executer.ts`显示了计算我的数组记号的过程。
+
 1. $\{x, y\}=x^y$。
 2. $\{x, y|1\}=x^y$。
 3. $\{x, 1|P\} = x$。
