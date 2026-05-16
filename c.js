@@ -10,7 +10,7 @@ class CSVViewer {
     this.readfile = this.params.get("a") || "iblp";
 
     // 配置常量
-    this.PAGE_SIZE = 1e300;
+    this.PAGE_SIZE = 1.79769e308;
 
     // 数据状态
     this.fullDataset = []; // 原始全部数据行
