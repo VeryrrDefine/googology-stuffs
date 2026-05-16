@@ -4,7 +4,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSV Reader</title>
+    <title>CSV Reader - 折叠前缀与分页</title>
+    <style>
+        td {
+            max-width: 60vw;
+            word-break: break-all;
+            border: 2px solid red;
+            padding: 6px;
+            vertical-align: top;
+        }
+
+        th {
+            border: 2px solid red;
+            background-color: #f2f2f2;
+            padding: 8px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .group-header {
+            background-color: #e6f7ff;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .group-header td:first-child::before {
+            content: "📁 ";
+            font-size: 1.1em;
+        }
+
+        .group-header.collapsed td:first-child::before {
+            content: "📂 ";
+        }
+
+        .group-header:hover {
+            background-color: #d0ebff;
+        }
+
+        .pagination {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .pagination button {
+            padding: 6px 12px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .pagination button.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .page-info {
+            margin: 0 10px;
+            font-weight: bold;
+        }
+
+        .record-info {
+            text-align: center;
+            margin-top: 10px;
+            font-style: italic;
+        }
+    </style>
 </head>
 
 <body>
@@ -13,18 +92,21 @@
     <p>Other analysis: </p>
     <ul id="otheranalysis"></ul>
     <p id="htmldata"></p>
+    <div id="folder-panel"></div>
     <table>
+        <thead id="table-head">
+            <tr>
+                <th>Defective embedding notation 3</th>
+                <th>Main</th>
+                <th>Note</th>
+            </tr>
+        </thead>
         <tbody id="tbody">
         </tbody>
     </table>
+    <div id="pagination" class="pagination"></div>
+    <div class="record-info" id="record-info"></div>
     <script src="c.js"></script>
-    <style>
-        td {
-            max-width: 60vw;
-            word-break: break-all;
-            border: 2px solid red;
-        }
-    </style>
 </body>
 
 </html>
