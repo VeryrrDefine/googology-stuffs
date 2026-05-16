@@ -1,3 +1,4 @@
+// 失败的程序定义
 export type MANNumber = MyArrayNotation | number;
 class Spliter {
   inner: AdditionalTerm;
@@ -10,7 +11,7 @@ class Spliter {
 }
 class AdditionalTerm {
   terms: (MANNumber | Spliter)[] = [];
-  constructor(x?: number) {
+  constructor(x?: MANNumber) {
     if (x !== undefined) {
       this.terms = [x];
     }
@@ -49,6 +50,36 @@ class AdditionalTerm {
     newterm[last1] = x;
 
     if (newterm[last1 + 1] instanceof Spliter) {
+      let lExt = newterm[last1 + 2];
+      console.log("Lext", lExt);
+      if (lExt instanceof Spliter) throw new Error("Number wrong");
+      let num = lExt;
+      if (lExt instanceof MyArrayNotation) throw new Error("Number to large");
+      // 1(1)3 => 1,(0),1,(0),1,(0)...,2(1)2
+      if (x instanceof MyArrayNotation) throw new Error("Number to large");
+      if (x >= 500) throw new Error("Number to large");
+      if (typeof num == "number") {
+        let spliter = newterm[last1 + 1] as Spliter;
+        // 1,(1),2 => 1,(0),1,(0),1,(0)...,2 (0)省略
+        let new2 = newterm.slice(0, last1);
+        for (let i = 0; i < x; i++) {
+          new2.push(1);
+          if (spliter.inner.terms[0] !== 1)
+            new2.push(
+              new Spliter(
+                new AdditionalTerm(
+                  substract(spliter.inner.terms[0] as MANNumber),
+                ),
+              ),
+            );
+        }
+        new2.push(2);
+        new2 = new2.concat(substract(lExt));
+        new2 = new2.concat(newterm.slice(last1 + 3));
+        let new3 = new AdditionalTerm();
+        new3.terms = new2;
+        return new3;
+      }
       throw new Error("Not Implemented");
     } else {
       newterm[last1 + 1] = substract(newterm[last1 + 1] as MANNumber);
