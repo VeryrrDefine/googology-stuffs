@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (!readfile) return;
 
   try {
-    const response = await fetch(`/${readfile}.csv`);
+    const response = await fetch(`${readfile}.csv`);
     if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
 
     const text = await response.text();
