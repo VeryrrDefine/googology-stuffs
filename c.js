@@ -10,7 +10,7 @@ class CSVViewer {
     this.readfile = this.params.get("a") || "iblp";
 
     // 配置常量
-    this.PAGE_SIZE = 1.79769e308;
+    this.PAGE_SIZE = 10000;
 
     // 数据状态
     this.fullDataset = []; // 原始全部数据行
@@ -148,7 +148,7 @@ class CSVViewer {
 
     // 分离表头和数据
     this.headers = rows[0];
-    this.fullDataset = rows.slice(1);
+    this.fullDataset = rows.slice(1).map((v, i) => [i.toString(), ...v]);
 
     // 确保至少3列
     while (this.headers.length < 3) {
@@ -176,7 +176,7 @@ class CSVViewer {
    */
   renderTableHeader() {
     this.tableHead.innerHTML = `
-      <tr>${this.headers.map((h) => `<th>${this.escapeHtml(h)}</th>`).join("")}</tr>
+      <tr><th>分析编号</th>${this.headers.map((h) => `<th>${this.escapeHtml(h)}</th>`).join("")}</tr>
     `;
   }
 
@@ -195,7 +195,7 @@ class CSVViewer {
       const folderRows = [];
       for (let j = 0; j < this.fullDataset.length; j++) {
         const row = this.fullDataset[j];
-        const firstCol = row[0] || "";
+        const firstCol = row[1] || "";
         if (firstCol >= folder.startStr && firstCol <= folder.endStr) {
           folderRows.push(row);
           coveredRows.add(j);
@@ -223,7 +223,7 @@ class CSVViewer {
       }
 
       const row = this.fullDataset[i];
-      const firstCol = row[0] || "";
+      const firstCol = row[1] || "";
       groups.push({
         type: "row",
         data: row,
@@ -391,11 +391,11 @@ class CSVViewer {
     for (let idx = 0; idx < pageRows.length; idx++) {
       const row = pageRows[idx];
       const isGroupHeader =
-        row[0] &&
-        (row[0].includes("前缀相同的分析") || row[0].includes("自定义文件夹"));
+        row[1] &&
+        (row[1].includes("前缀相同的分析") || row[1].includes("自定义文件夹"));
       const rowClass = isGroupHeader ? "group-header" : "";
       const collapsedClass =
-        isGroupHeader && row[0].includes("📂") ? "collapsed" : "";
+        isGroupHeader && row[1].includes("📂") ? "collapsed" : "";
 
       html += `<tr class="${rowClass} ${collapsedClass}" data-row-index="${start + idx}">`;
       for (let c = 0; c < row.length; c++) {
