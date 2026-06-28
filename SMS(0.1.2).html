@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS Expander</title>
+</head>
+
+<body>
+    <h3>SMS Expander Extended By Seanxlx(BMS Expander Made By FiveYearGaoKao)</h3>
+    Version:v0.1.2(SMS:1.7, BMS:4)<br>
+    <textarea name="input" id="input" style="width:100%;resize: none;" rows="3" placeholder="Input"></textarea><br>
+    <textarea name="output" id="output" style="width:100%;resize: none;" rows="3" placeholder="Output"></textarea><br>
+    <button onclick="expand()">Expand</button><textarea id="fsterm" style="resize: none;" rows="1">3</textarea>
+    <p>如果你输入的表达式不标准，则可能会得出错误的结果！</p>
+	<span>SMS1.7: 特别地：叶元素带*且与坏元素的数值差≥1，那么在展开前，移除叶元素的*，叶元素下方加一个1*，然后这个1*作为叶元素来展开。</span><br/>
+	<b>由于技术限制，没做这条，请在输入展开式前检查，如果右下角元素≥2*，手动移除右下角的*，然后在它底下加一个1*。</b>
+</body>
+<script>
+    function expand() {    //BMS to 0-Y
+        document.getElementById('output').value = ''
+        var s = document.getElementById('input').value
+        var fs=parseInt(document.getElementById('fsterm').value)
+        s = s.substring(1, s.length - 1).split(')(')
+        let l = s.length
+		let st = new Array(l), prefst = new Array(l);
+        let rows = 1
+        let parents = new Array(l), sparents = new Array(l);
+        let resTest=""
+		let activeRow = new Array(l).fill(0);
+        for (let i = 0; i < l; i++) {
+            parents[i] = []
+			sparents[i] = []
+            s[i] = s[i].split(',')
+			st[i] = new Array(s[i].length);
+			prefst[i] = new Array(s[i].length);
+			for(let j = 0;j < s[i].length;j++)
+			{
+				if(s[i][j].includes('*'))
+				{
+					st[i][j] = true;
+					s[i][j] = s[i][j].split('').filter(c => c !== '*').join('');
+				}
+				else st[i][j] = false;
+				prefst[i][j] = 0;
+			}
+            rows = Math.max(rows, s[i].length)
+        }
+        for (let i = 0; i < l; i++) {
+            for (let k = 0; k < rows; k++) {
+                if (s[i].length <= k) {
+                    s[i].push(0)
+					st[i].push(false);
+					prefst[i].push(0);
+                }
+				else if(s[i][k] == '') s[i][k] = 0;
+				else {
+                    s[i][k] = parseInt(s[i][k])
+                }
+            }
+        }
+		for(let i = 0;i < l;i++)
+		{
+			for(let j = 0;j < rows;j++)
+			{
+				if(s[i][j] > 0) activeRow[i]++;
+				else break;
+			}
+		}
+		for (let i = 0;i < l;i++) {
+			for(let j = 0;j < rows;j++) {
+				if(st[i][j]) {
+					for(let k = j + 1;k < rows;k++) {
+						prefst[i][k]++;
+					}
+				}
+			}
+		}
+        for (let i = 0; i < rows; i++) {    // Calculate the parent
+            for (let j = 0; j < l; j++) {
+                let k = j
+				if(!st[j][i])
+				{
+					while (k >= 0 && (s[k][i] >= s[j][i] || (!st[k][i] && prefst[k][i] > prefst[j][i]))) {
+						if (i == 0) {
+							k--
+						} else {
+							k = parents[k][i - 1][0]
+						}
+					}
+					parents[j][i] = [k, i];
+				}
+				else
+				{
+					for(let m = i - 1;m >= 0;m--)
+					{
+						k = j;
+						while (k >= 0 && (activeRow[k] >= activeRow[j] || s[k][m] > s[j][i] || s[k][m] === 0 || st[k][m]))
+						{
+							if(m == 0)
+							{
+								k--;
+							}
+							else
+							{
+								k = parents[k][m - 1][0];
+							}
+						}
+						if(k >= 0)
+						{
+							parents[j][i] = [k, m];
+							break;
+						}
+					}
+				}
+            }
+        }
+        for (let i = 0; i < rows; i++) {    // Calculate the parent
+            for (let j = 0; j < l; j++) {
+                let k = j
+				if(!st[j][i])
+				{
+					sparents[j][i] = parents[j][i];
+				}
+				else
+				{
+					while (k >= 0 && (s[k][i] > s[j][i] || st[k][i]))
+					{
+						if(i == 0) k--;
+						else k = sparents[k][i - 1][0];
+					}
+					sparents[j][i] = [k, i];
+				}
+            }
+        }
+		let res=[]
+		for(let j = 0;j < l;j++)
+		{
+			let str = [];
+			for(let i = 0;i < rows;i++)
+			{
+				if(st[j][i]) str.push(s[j][i] + '*');
+				else str.push(s[j][i]);
+			}
+			res.push(str);
+		}
+        let x = -1
+        while (s[l - 1][x+1] > 0) {
+            x++
+        }
+        if(!st[l - 1][x]) res.pop();
+		else
+		{
+			res[l - 1][x] = res[l - 1][x].split('').filter(c => c !== '*').join('');
+		}
+        if (x >= 0){    // Limit Ordinal, expand
+			console.log(parents[l-1][x]);
+			let badElement = parents[l - 1][x];
+			let badRoot = badElement[0];
+			let sbadElement = sparents[l - 1][x];
+			let sbadRoot = sbadElement[0];
+			if(!st[l - 1][x])
+			{
+				let badLength = l-1-badRoot
+				let ascValue = new Array(rows).fill(0)
+				for(let i=0;i<x;i++){
+					ascValue[i]=s[l-1][i]-s[badRoot][i]
+				}
+				let ascMat=new Array(badLength)
+				for(let i=0;i<badLength;i++){    // Calculate the Ascension Value
+					ascMat[i]=new Array(rows).fill(0)
+				}
+				let starMat = new Array(l)
+				for(let i = 0;i < l;i++)
+				{
+					starMat[i] = new Array(rows).fill(false)
+				}
+				for(let i=0;i<x;i++){    // Calculate the Ascension Matrix
+					for(let j=0;j<badLength;j++){
+						let k=j+badRoot
+						while(k>badRoot){
+							k=parents[k][i][0]
+						}
+						ascMat[j][i]=(k==badRoot?1:0)
+						starMat[j+badRoot][i] = st[j+badRoot][i] || st[l - 1][i];
+					}
+				}
+				for(let i=1;i<=fs;i++){
+					for(let j=badRoot;j<l-1;j++){
+						let u=new Array(rows)
+						for(let k=0;k<rows;k++){
+							u[k]=s[j][k]+ascValue[k]*i*ascMat[j-badRoot][k]
+							u[k] += starMat[j][k] || st[j][k] ? '*' : '';
+						}
+						res.push(u)
+					}
+				}
+			}
+			else
+			{
+				st[l - 1][x] = false;
+				let badLength = l-1-badRoot
+				let badBlock = [badElement, [l - 1, x]];
+				let fillHeight = badBlock[1][1] - badBlock[0][1];
+				let extraLine = badBlock[0][1];
+				let ascValueMat = new Array(l);
+				let ascValue = new Array(rows).fill(0)
+				for(let i=0;i<x;i++){
+					ascValue[i]=s[l-1][i]-s[badRoot][i]
+				}
+				let ascMat=new Array(badLength+1)
+				for(let i=0;i<=badLength;i++){    // Calculate the Ascension Value
+					ascMat[i]=new Array(rows).fill(0)
+				}
+				for(let i=0;i<x;i++){    // Calculate the Ascension Matrix
+					for(let j=0;j<=badLength;j++){
+						let k=j+badRoot
+						while(k>badRoot){
+							k=parents[k][i][0]
+						}
+						ascMat[j][i]=(k==badRoot?1:0)
+					}
+				}
+				let starAscMat = new Array(l);
+				for(let i = 0;i < l;i++) starAscMat[i] = new Array(rows).fill(0);
+				for(let i = 0;i < x;i++)
+				{
+					for(let j = badRoot;j < l;j++)
+					{
+						let k = j;
+						while(k > sbadRoot) k = sparents[k][i][0]
+						starAscMat[j][i]=(k==sbadRoot?1:0)
+					}
+				}
+				for(let i = 0;i < l;i++) ascValueMat[i] = new Array(rows).fill(0);
+				for(let i = badRoot;i < l;i++)
+				{
+					for(let j = 0;j < rows;j++)
+					{
+						ascValueMat[i][j] = s[i][j] - s[badBlock[0][0]][badBlock[0][1]]
+					}
+				}
+				for(let i = 1;i <= fs;i++)
+				{
+					for(let j = badRoot + 1;j < l;j++)
+					{
+						let u = new Array(rows + fillHeight * i);
+						for(let k = 0;k < extraLine;k++)
+						{
+							u[k] = s[badBlock[0][0]][badBlock[0][1]] + ascValueMat[j][k] + ascValue[k] * i * ascMat[j - badRoot][k];
+							u[k] += st[j][k] ? '*' : '';
+						}
+						for(let m = 1;m <= i;m++)
+						{
+							for(let k = extraLine;k < fillHeight + extraLine;k++)
+							{
+								u[k + fillHeight * (i - m)] = s[badBlock[0][0]][badBlock[0][1]] + ascValueMat[j][k] + ascValue[k] * m * ascMat[j - badRoot][k];
+								u[k + fillHeight * (i - m)] += st[j][k] && starAscMat[j][k] ? '*' : '';
+							}
+						}
+						for(let k = badBlock[0][1];k <= badBlock[1][1];k++)
+						{
+							u[k + fillHeight * i] = s[badBlock[0][0]][badBlock[0][1]] + ascValueMat[j][k];
+							u[k + fillHeight * i] += st[j][k] ? '*' : '';
+						}
+						for(let k = u.length - 1;k >= 0;k--)
+						{
+							console.log(u, k, u[k]);
+							if(u[k] == '' || u[k] == 0 || u[k] == '0' || u[k] == undefined) u.pop();
+							else break;
+						}
+						res.push(u);
+					}
+				}
+			}
+        }
+        for (let i = 0; i < res.length; i++) {
+            resTest += ('(' + res[i].join(',') + ')')
+        }
+        document.getElementById('output').value += (resTest + '\n')
+    }
+</script>
+
+</html>
