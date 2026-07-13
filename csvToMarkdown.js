@@ -22,5 +22,5 @@ let f = fs.readFileSync('pps4-newanalysis.csv')
 let str = f.toString("utf-8");
 let array3 = csvToArray(str).slice(1);
 let content = array3.map(x => `$${x[0]}=${ords.printOrd(x[1].split(',').map((x) => parseInt(x))).replaceAll('ω', '\\omega').replaceAll("(", "{").replaceAll(")", "}").replaceAll("*", "\\times")}$`).join("\n\n")
-content = `本分析一共 ${array3.length} 行。左为PPS4。\n\n${content}`
-fs.writeFileSync("pps4.md", content);
+let content2 = `本分析一共 ${array3.length} 行。左为PPS4。\n\n注:原分析为csv格式，对象为PPS4 versus LPrSS。\n\n${content}`
+console.log(content2)
