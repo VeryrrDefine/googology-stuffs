@@ -139,7 +139,7 @@ class CSVViewer {
    * 加载CSV文件
    */
   async loadCSV() {
-    const PREFIX = location.hostname == "veryrrd.googology.top" ? "https://veryrrd.googology.top/googology/" : ""
+    const PREFIX = location.hostname == "veryrrd.googology.top" ? "https://veryrrd.googology.top/googology-stuffs" : ""
     const response = await fetch(PREFIX + `/analysis/${this.readfile}.csv`);
     if (!response.ok) throw new Error(`HTTP错误: ${response.status}`);
 
