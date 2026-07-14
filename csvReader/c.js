@@ -683,8 +683,9 @@ class CSVViewer {
       ["mine/bm1", "Bashicu Matrix 1 (🎉)"],
       ["mine/iblp", "Infinite Basic Laver Pattern"],
       ["mine/pps4", "Parented Predecessor Sequence 4 (Old Analysis)"],
-      ["mine/pps4-newanalysis", "Parented Predecessor Sequence (New Analysis)"],
+      ["mine/pps4-newanalysis", "Parented Predecessor Sequence 4 (New Analysis)"],
       ["mine/tbms", "Transfinite BMS"],
+      ["mine/sm1.7", "Seanxlx's Matrix 1.7 (with BM4)"],
     ];
 
     const otheranalysis = document.getElementById("otheranalysis");
