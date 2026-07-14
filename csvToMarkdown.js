@@ -24,3 +24,4 @@ let array3 = csvToArray(str).slice(1);
 let content = array3.map(x => `$${x[0]}=${ords.printOrd(x[1].split(',').map((x) => parseInt(x))).replaceAll('ω', '\\omega').replaceAll("(", "{").replaceAll(")", "}").replaceAll("*", "\\times")}$`).join("\n\n")
 let content2 = `本分析一共 ${array3.length} 行。左为PPS4。\n\n注:原分析为csv格式，对象为PPS4 versus LPrSS。\n\n${content}`
 console.log(content2)
+// console.log(ords.printOrd([1, 2, 3, 4, 5, 4, 5, 2, 3, 4, 5, 3]));
