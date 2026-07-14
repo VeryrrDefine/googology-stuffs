@@ -139,7 +139,8 @@ class CSVViewer {
    * 加载CSV文件
    */
   async loadCSV() {
-    const response = await fetch(`${this.readfile}.csv`);
+    const PREFIX = location.hostname == "veryrrd.googology.top" ? "https://veryrrd.googology.top/googology/" : ""
+    const response = await fetch(PREFIX + `/analysis/${this.readfile}.csv`);
     if (!response.ok) throw new Error(`HTTP错误: ${response.status}`);
 
     const text = await response.text();
@@ -621,21 +622,20 @@ class CSVViewer {
         
         <div class="folder-list">
           <h4>已创建的文件夹:</h4>
-          <ul>${
-            this.customFolders.length
-              ? this.customFolders
-                  .map(
-                    (f) => `
+          <ul>${this.customFolders.length
+        ? this.customFolders
+          .map(
+            (f) => `
               <li>
                 <span>${this.escapeHtml(f.name)}</span>
                 <span class="folder-range">[${this.escapeHtml(f.startStr)} ~ ${this.escapeHtml(f.endStr)}]</span>
                 <button class="remove-folder-btn" data-id="${f.id}">删除</button>
               </li>
             `,
-                  )
-                  .join("")
-              : "<li>暂无文件夹</li>"
-          }</ul>
+          )
+          .join("")
+        : "<li>暂无文件夹</li>"
+      }</ul>
         </div>
       </div>
     `;
@@ -679,11 +679,12 @@ class CSVViewer {
    */
   renderSidebar() {
     const otherAnalysisDatas = [
-      ["bhm", "Bashicu Hyper Matrix"],
-      ["bm1", "Bashicu Matrix 1 (🎉)"],
-      ["iblp", "Infinite Basic Laver Pattern"],
-      ["pps4", "Parented Predecessor Sequence"],
-      ["tbms", "Transfinite BMS"],
+      ["mine/bhm", "Bashicu Hyper Matrix"],
+      ["mine/bm1", "Bashicu Matrix 1 (🎉)"],
+      ["mine/iblp", "Infinite Basic Laver Pattern"],
+      ["mine/pps4", "Parented Predecessor Sequence 4 (Old Analysis)"],
+      ["mine/pps4-newanalysis", "Parented Predecessor Sequence (New Analysis)"],
+      ["mine/tbms", "Transfinite BMS"],
     ];
 
     const otheranalysis = document.getElementById("otheranalysis");
