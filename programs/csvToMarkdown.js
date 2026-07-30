@@ -17,7 +17,7 @@ function csvToArray(csv) {
 }
 const fs = require('fs');
 const ords = require('./ordinal.js');
-let f = fs.readFileSync('pps4-newanalysis.csv')
+let f = fs.readFileSync('analysis/mine/pps4-newanalysis.csv')
 
 let str = f.toString("utf-8");
 let array3 = csvToArray(str).slice(1);
