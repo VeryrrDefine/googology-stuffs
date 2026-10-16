@@ -1,1 +1,4 @@
 nonverified*
+node_modules
+package-lock.json
+programs/js

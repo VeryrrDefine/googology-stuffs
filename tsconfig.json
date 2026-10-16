@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "lib": [
+            "ES2022",
+        ],
+        "target": "ES2022",
+        "sourceMap": true,
+        "strict": false,
+        "rootDir": "./programs/ts",
+        "outDir": "./programs/js"
+    },
+    "include": [
+        "programs/ts/*/*.ts",
+        "programs/ts/*.ts",
+    ],
+}
