@@ -684,7 +684,7 @@ class CSVViewer {
       ["mine/iblp", "Infinite Basic Laver Pattern"],
       ["mine/pps4", "Parented Predecessor Sequence 4 (Old Analysis)"],
       ["mine/pps4-newanalysis", "Parented Predecessor Sequence 4 (New Analysis)"],
-      ["mine/tbms", "Transfinite BMS"],
+      ["mine/tbms", "Transfinite BMS (🎉)"],
     ];
 
     const otheranalysis = document.getElementById("otheranalysis");
