@@ -7,7 +7,7 @@ class CSVViewer {
   constructor() {
     // URL参数
     this.params = new URL(location.href).searchParams;
-    this.readfile = this.params.get("a") || "iblp";
+    this.readfile = this.params.get("a") || "mine/iblp";
 
     // 配置常量
     this.PAGE_SIZE = 10000;
