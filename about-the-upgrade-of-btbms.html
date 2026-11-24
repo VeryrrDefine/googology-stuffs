@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTBMS——一个被gggist分析错了5次的记号</title>
+</head>
+
+<body>
+    <h1>BTBMS——一个被gggist分析错了5次的记号</h1>
+    <p>参考<a href="https://wiki.googology.top/index.php/BTBMS">https://wiki.googology.top/index.php/BTBMS</a></p>
+    <p>BTBMS，是由Bubby3和社区讨论给出理念，并于2026年7月14日由笑姐姐给出完整定义（参见<a href="https://smilelee-lyx.github.io/ne-rewritten">NE
+            Rewritten</a>）的序数记号。</p>
+    <p>BTBMS可能是现有递归Hydra记号里强度最高的一个。</p>
+    <p>关于BTBMS，由于早期记号定义不完善，许多分析者给出了<span class="math">Y(1,3,4,2,5,8,11)</span>,<span
+            class="math">Y(1,3,4,6)</span>,<span class="math">
+            Y(1,3,5)</span>等结果</p>
+    <p>笑姐姐给出BTBMS完整定义后，test_alpha0进行了BTBMS的分析，得出<span class="math">\mathrm{BTBMS limit} =
+            Y(1,3,9)</span>，但是2026年9月15日142857cs找到了<span class="math">(0)(1^{(2,2)},1,1)\mapsto
+            Y(1,3,9)</span>的程序，推翻了这一结果；2026年9月25日test_alpha0给出了<span class="math">(0)(1^{(2,2)(3,2)(4)})\mapsto
+            \omega\mathrm{-Y Limit}</span>的程序，随后是<span class="math">(0)(1^{(2,2)(3,3)})\mapsto
+            \eps_0\mathrm{MN Limit}</span>，BTBMS就此成为可能是递归Hydra记号里强度最高的一个。</p>
+    <p>在<span class="math">\eps_0\mathrm{MN Limit}</span>之后，BTBMS基本只能与iblp对照（两者都有良序证明）。</p>
+    </p>
+    <p>现有假说认为BTBMS极限超过了理想Ω-Y极限，甚至iblp极限。</p>
+    <p>此外，有一个由美国某两个AI公司的大模型给出的IBLP vs BTBMS分析指出<span class="math">\mathrm{IBLP
+            Limit}=(0)(1^{(2,1,1,1)})(0)(3)(3)(3)(3)</span>，但这一结果并未得到验证。
+    <h2>良序性</h2>
+    <p>BTBMS在<span class="math">\mathrm{ZFC}+\exists n-\mathsf{Mahlo}</span>下是良序的。</p>
+    <h3>其他记号的良序</h3>
+    <ul>
+        <li>BMS, 现有证明表明<span class="math">\mathrm{BMSLimit}\le \operatorname{PTO}(\mathrm{Z}_2)</span>。</li>
+        <li>1-Y, 现有证明表明<span class="math">\mathrm{1-YLimit}\lt \operatorname{PTO}(\mathrm{KP}\omega+\exists
+                \omega_1)</span>。
+        </li>
+        <li>ω-Y, 现有证明表明<span class="math">\mathrm{ω-YLimit}\lt \operatorname{PTO}(\mathrm{KP}\omega+\exists
+                \omega_1)</span>。
+        </li>
+        <li>ε0MN, 现有证明表明<span class="math">ε_0\mathrm{MN}\lt \operatorname{PTO}(\mathrm{KP}\omega+\exists
+                \omega_1)</span>。
+        </li>
+        <li>IBLP, 现有证明表明<span class="math">\mathrm{IBLP}\lt \operatorname{PTO}(\mathrm{ZFC}+\mathrm{I3})</span>，可能<span
+                class="math">\lt \operatorname{PTO}(\mathrm{ZFC}+0^{\sharp})</span>。
+        </li>
+    </ul>
+    <h2>BTBMS相关文章</h2>
+    <ul>
+
+        <li><a href="https://zhuanlan.zhihu.com/p/2084565209">序数Y(1,3,4,3)的TBMS结构分析 一</a></li>
+        <li><a href="https://zhuanlan.zhihu.com/p/3205262451">序数Y(1,3,4,3)的TBMS结构分析 二</a></li>
+        <li><a href="https://zhuanlan.zhihu.com/p/3280214506">序数Y(1,3,4,3)的TBMS结构分析 终</a></li>
+    </ul>
+    <h2>序数记号图</h2>
+    <img src="images/ggg.png" style="width: 25%" />
+    <h1>BTBMS分析</h1>
+    <h2>0 ,,1 2 1 2,,1 31 2,,1提升</h2>
+    <p>0 ,,1 2 1 2,,1 31前2,,1并没有特殊之处，我们有</p>
+    <p class="math">\begin{array}{l}
+        (0)(1^{(2)})(2)(1^{(4)}) = \text{0 ,,1 2 1 2,,1 3 2,,1} \\
+        (0)(1^{(2)})(2)(1^{(4)})(4) = \text{0 ,,1 2 1 2,,1 3 2,,1 3}\\
+        (0)(1^{(2)})(2)(2) = \text{0 ,,1 2 1 2,,1 3 3}\\
+        (0)(1^{(2)})(2)(3) = \text{0 ,,1 2 1 2,,1 3 4}\\
+        (0)(1^{(2)})(2)(3,3) = \text{0 ,,1 2 1 2,,1 3 41}\\
+        (0)(1^{(2)})(2)(3^{(4)}) = \text{0 ,,1 2 1 2,,1 3 4,,1}\\
+        (0)(1^{(2)})(2,1) = \text{0 ,,1 2 1 2,,1 31}\\
+        \end{array}</p>
+    <p>但是0 ,,1 2 1 2,,1 31 2,,1就特殊了，它的展开式为
+        0 ,,1 2 1 2,,1 31 21 32,,1 (421) 321 432,,1 (5321) 4321 5432,,1 (64321) ...</p>
+    <p>括号括起来的ωMN项产生了<span class="math">(0)(1^{(2)})(2,1) \to (0)(1^{(2)})(2,1,1) \to (0)(1^{(2)})(2,1,1,1) \cdots</span>
+    </p>
+    <p>因此我们有<span class="math">(0)(1^{(2)})(2,1^{(4)}) = \text{0 ,,1 2 1 2,,1 31 2,,1}。</span></p>
+    <p>这是一个类似于(0)(1,1,1)(2,1)(1,1,1)的提升，但是2,,1把31的row从2提升了，直到无穷大。</p>
+    <h3>具体分析</h3>
+    <p>这里的具体分析涉及到Y和BMS的在1,2,4,8,10,8的错层</p>
+    <p>[WIP]</p>
+    <script src="https://unpkg.com/katex@0.16.28/dist/katex.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://unpkg.com/katex@0.16.28/dist/katex.min.css" crossorigin="anonymous">
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const defaultMacros = {
+            "\\w": "\\omega",
+            "\\W": "\\Omega",
+            "\\m": "\\cdot",
+            '\\D': "\\W_{a+1}",
+            '\\eps': "\\varepsilon",
+        }
+        document.querySelectorAll(".math").forEach(x => {
+            const latexString = katex.renderToString(x.innerText, { throwOnError: false, macros: defaultMacros });
+            x.innerHTML = latexString;
+        })
+    })
+
+</script>
+
+</html>
