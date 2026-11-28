@@ -284,6 +284,128 @@
                 background: rgba(108, 182, 255, .10);
             }
         }
+
+        /* ---------- 目录 ---------- */
+        .toc {
+            margin: 1.5rem 0 2rem;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: .5rem 1rem 1rem;
+            font-size: .9rem;
+        }
+
+        .toc>summary {
+            cursor: pointer;
+            font-weight: 600;
+            padding: .35rem 0;
+            list-style: none;
+            user-select: none;
+        }
+
+        .toc>summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .toc>summary::before {
+            content: "▸";
+            display: inline-block;
+            margin-right: .45em;
+            transition: transform .15s;
+        }
+
+        .toc[open]>summary::before {
+            transform: rotate(90deg);
+        }
+
+        .toc-toolbar {
+            display: flex;
+            gap: .5rem;
+            margin: .25rem 0 .5rem;
+            font-size: .8rem;
+        }
+
+        .toc-toolbar button {
+            background: var(--bg);
+            color: var(--fg-muted);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: .15em .6em;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        .toc-toolbar button:hover {
+            color: var(--fg);
+            border-color: var(--fg-muted);
+        }
+
+        .toc ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .toc ul ul {
+            padding-left: 1.1em;
+        }
+
+        .toc li {
+            margin: .1em 0;
+        }
+
+        .toc a {
+            color: var(--fg);
+            text-decoration: none;
+            display: block;
+            padding: .15em .35em;
+            border-radius: 4px;
+            line-height: 1.45;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .toc a:hover {
+            background: var(--bg);
+        }
+
+        .toc a.active {
+            color: var(--link);
+            background: color-mix(in srgb, var(--link) 12%, transparent);
+            font-weight: 600;
+        }
+
+        .toc li.has-children>.toc-row {
+            display: flex;
+            align-items: center;
+            gap: .1em;
+        }
+
+        .toc-toggle {
+            flex: 0 0 auto;
+            background: none;
+            border: 0;
+            color: var(--fg-muted);
+            cursor: pointer;
+            padding: 0 .2em;
+            font-size: .7em;
+            line-height: 1;
+            transition: transform .15s;
+        }
+
+        .toc li.collapsed>.toc-toggle {
+            transform: rotate(-90deg);
+        }
+
+        .toc li.collapsed>ul {
+            display: none;
+        }
+
+        .toc-toggle:focus-visible {
+            outline: 2px solid var(--link);
+            outline-offset: 2px;
+        }
     </style>
 </head>
 
@@ -650,7 +772,7 @@
         \end{array}</p>
 
 
-    <h2>0 ,,1 2 1 2,,1 3,,1 31 2,,1 3,,1提升链</h2>
+    <h2>0 ,,1 2 1 2,,1 3,,1 31 2,,1 3,,1提升链(1,3,4,2,5,8,7~1,3,4,2,5,8,10)</h2>
     <p>这个提升链，它甚至可以牵扯到BMS与BOCF在(0)(1,1,1)(2,1,1)(2,1)(1,1,1)(2,1,1)产生的提升效应，此处BMS的提升可参考<a
             href="https://zhuanlan.zhihu.com/p/645633440">从一写到无穷大(14)——BMS：多重提升</a>。</p>
     <p class="math">\begin{array}{l}
@@ -686,7 +808,7 @@
         \end{array}</p>
     <p>至此朴素TBMS的使命结束了。然而0 ,,1 2 1 2,,1 3,,1 41 2,,1又会产生一次提升……BTBMS能解决这些问题吗？</p>
     <p class="warn">正片开始</p>
-    <h2>BTBMS的(1,1,1)传染上标与Y序列的4 9 14 17 10 (1,3,4,2,5,8,10~1,3,4,2,5,8,10,4,9,14,17,13,21)</h2>
+    <h2>BTBMS的(1,1,1)传染上标与Y序列的4 9 14 17 10</h2>
     <p>看ωMN准备了什么：0 ,,1 2 1 2,,1 3,,1 41 2,,1会展开成0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 [521] 321 432,,1 532,,1
         [6321]……，展开结果硬是把TBMS搓成了类似于(0)(1)(2,1<sup>Ω</sup>)(2,1)(3,2,1<sup>Ω<sub>ω</sub></sup>)(3,2,1)(4,3,2,1<sup>3-row
             Non Recursive
@@ -991,6 +1113,158 @@ variance万兵手，命若黄泉不回头！
             const latexString = katex.renderToString(x.innerText, { throwOnError: false, macros: defaultMacros });
             x.innerHTML = latexString;
         })
+
+        /* ---------- 1. 收集标题（跳过目录自身） ---------- */
+        const headings = [...document.querySelectorAll('h1, h2, h3')]
+            .filter(h => !h.closest('.toc'))
+            .filter(h => h.textContent.trim());
+        if (!headings.length) return;
+
+        /* ---------- 2. 生成 id（保留已有 id，避免重复） ---------- */
+        const usedIds = new Set();
+        const slugify = s => s.trim()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w\u4e00-\u9fa5-]/g, '')
+            .toLowerCase() || 'section';
+
+        function ensureId(el) {
+            if (el.id) { usedIds.add(el.id); return el.id; }
+            const base = slugify(el.textContent);
+            let id = base, i = 1;
+            while (usedIds.has(id) || document.getElementById(id)) id = `${base}-${i++}`;
+            el.id = id;
+            usedIds.add(id);
+            return id;
+        }
+
+        /* ---------- 3. 构建 h1 > h2 > h3 树 ---------- */
+        const tree = [];
+        let curH1 = null, curH2 = null;
+        for (const el of headings) {
+            const level = +el.tagName[1];
+            const item = { level, text: el.textContent.trim(), id: ensureId(el), children: [] };
+            if (level === 1) { tree.push(item); curH1 = item; curH2 = null; }
+            else if (level === 2) {
+                (curH1 ? curH1.children : tree).push(item);
+                curH2 = item;
+            } else {
+                (curH2 || curH1 ? (curH2 || curH1).children : tree).push(item);
+            }
+        }
+
+        /* ---------- 4. 渲染 ---------- */
+        const linkMap = new Map();
+        function render(items) {
+            const ul = document.createElement('ul');
+            for (const item of items) {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = '#' + item.id;
+                a.textContent = item.text;
+                a.title = item.text;
+                a.dataset.id = item.id;
+                linkMap.set(item.id, a);
+
+                if (item.children.length) {
+                    li.classList.add('has-children');
+                    // h2 下的 h3 默认折叠；h1 下的 h2 默认展开
+                    if (item.level === 2) li.classList.add('collapsed');
+
+                    const row = document.createElement('div');
+                    row.className = 'toc-row';
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'toc-toggle';
+                    btn.setAttribute('aria-label', '展开 / 折叠');
+                    btn.textContent = '▼';
+                    row.append(btn, a);
+                    li.appendChild(row);
+                    li.appendChild(render(item.children));
+
+                    btn.addEventListener('click', e => {
+                        e.preventDefault();
+                        li.classList.toggle('collapsed');
+                    });
+                } else {
+                    li.appendChild(a);
+                }
+                ul.appendChild(li);
+            }
+            return ul;
+        }
+
+        /* ---------- 5. 插入目录 ---------- */
+        const details = document.createElement('details');
+        details.className = 'toc';
+        details.open = true;
+
+        const summary = document.createElement('summary');
+        summary.textContent = '目录';
+        details.appendChild(summary);
+
+        const toolbar = document.createElement('div');
+        toolbar.className = 'toc-toolbar';
+        toolbar.innerHTML =
+            '<button type="button" data-act="expand">展开全部</button>' +
+            '<button type="button" data-act="collapse">折叠全部</button>';
+        details.appendChild(toolbar);
+        details.appendChild(render(tree));
+
+        toolbar.addEventListener('click', e => {
+            const act = e.target.dataset.act;
+            if (!act) return;
+            details.querySelectorAll('li.has-children').forEach(li => {
+                li.classList.toggle('collapsed', act === 'collapse');
+            });
+        });
+
+        const firstH1 = headings[0];
+        if (firstH1.tagName === 'H1') firstH1.insertAdjacentElement('afterend', details);
+        else document.body.insertBefore(details, document.body.firstChild);
+
+        /* ---------- 6. 滚动高亮 + 折叠时显示当前章节 ---------- */
+        const tocLinks = [...linkMap.values()];
+        const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        function updateActive() {
+            const offset = 100;
+            let currentId = null;
+            for (const h of headings) {
+                if (h.getBoundingClientRect().top - offset <= 0) currentId = h.id;
+                else break;
+            }
+            tocLinks.forEach(a => a.classList.toggle('active', a.dataset.id === currentId));
+
+            if (details.open) {
+                summary.textContent = '目录';
+            } else {
+                const a = currentId && linkMap.get(currentId);
+                summary.textContent = a ? '目录 · ' + a.textContent : '目录';
+            }
+        }
+
+        let ticking = false;
+        function onScroll() {
+            if (!ticking) {
+                ticking = true;
+                requestAnimationFrame(() => { updateActive(); ticking = false; });
+            }
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+        updateActive();
+
+        /* ---------- 7. 平滑滚动 ---------- */
+        details.addEventListener('click', e => {
+            const a = e.target.closest('a[href^="#"]');
+            if (!a) return;
+            const target = document.getElementById(a.getAttribute('href').slice(1));
+            if (!target) return;
+            e.preventDefault();
+            const top = target.getBoundingClientRect().top + window.scrollY - 20;
+            window.scrollTo({ top, behavior: prefersReduced ? 'auto' : 'smooth' });
+            history.replaceState(null, '', a.getAttribute('href'));
+        });
     })
 
 </script>
