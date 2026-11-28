@@ -5,6 +5,204 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BTBMS——一个被大数数学爱好者分析错了5次的记号</title>
+    <style>
+        /* ---------- 主题变量 ---------- */
+        :root {
+            color-scheme: light dark;
+
+            --bg: #ffffff;
+            --bg-alt: #f6f8fa;
+            --fg: #1f2328;
+            --fg-muted: #57606a;
+            --link: #0a58ca;
+            --link-visited: #6f42c1;
+            --border: #d0d7de;
+            --warn: #b42318;
+            --code-bg: #f6f8fa;
+            --code-fg: #1f2328;
+            --selection: #b6d7ff;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0d1117;
+                --bg-alt: #161b22;
+                --fg: #e6edf3;
+                --fg-muted: #9198a1;
+                --link: #6cb6ff;
+                --link-visited: #d2a8ff;
+                --border: #30363d;
+                --warn: #ff7b72;
+                --code-bg: #161b22;
+                --code-fg: #e6edf3;
+                --selection: #264f78;
+            }
+        }
+
+        /* ---------- 基础 ---------- */
+        html {
+            background: var(--bg);
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            margin: 0 auto;
+            max-width: 900px;
+            padding: 1.5rem 1.25rem 4rem;
+            line-height: 1.7;
+            font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans SC", sans-serif;
+            transition: background-color .2s ease, color .2s ease;
+        }
+
+        ::selection {
+            background: var(--selection);
+        }
+
+        /* ---------- 标题 ---------- */
+        h1,
+        h2,
+        h3,
+        h4 {
+            color: var(--fg);
+            line-height: 1.3;
+        }
+
+        h1 {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: .3em;
+        }
+
+        h2 {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: .25em;
+            margin-top: 2em;
+        }
+
+        h3,
+        h4 {
+            margin-top: 1.5em;
+        }
+
+        /* ---------- 链接 ---------- */
+        a {
+            color: var(--link);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        a:visited {
+            color: var(--link-visited);
+        }
+
+        /* ---------- 分隔线 ---------- */
+        hr {
+            border: 0;
+            border-top: 1px solid var(--border);
+            margin: 2em 0;
+        }
+
+        /* ---------- 代码 / 预格式 ---------- */
+        code,
+        pre,
+        .math,
+        .expr-display {
+            font-family: ui-monospace, SFMono-Regular, "Cascadia Code", Consolas, monospace;
+        }
+
+        code {
+            background: var(--code-bg);
+            color: var(--code-fg);
+            padding: .15em .35em;
+            border-radius: 4px;
+            font-size: .9em;
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--code-fg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: .9em 1em;
+            overflow-x: auto;
+            line-height: 1.5;
+            font-size: .875em;
+        }
+
+        /* ---------- 公式 / 表达式 ---------- */
+        .math {
+            color: var(--fg);
+        }
+
+        /* KaTeX 渲染出的块级公式允许横向滚动，避免长 array 溢出 */
+        .katex-display {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: .4em 0;
+        }
+
+        .expr-display {
+            display: inline-block;
+            max-width: 100%;
+            overflow-x: auto;
+            vertical-align: middle;
+            font-size: .9em;
+            background: var(--bg-alt);
+            border-radius: 4px;
+            padding: 0 .3em;
+        }
+
+        /* ---------- 提示 / 警告 ---------- */
+        .warn {
+            color: var(--warn) !important;
+        }
+
+        /* ---------- details ---------- */
+        details {
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: .5em .8em;
+            background: var(--bg-alt);
+        }
+
+        summary {
+            cursor: pointer;
+            color: var(--fg);
+        }
+
+        /* ---------- 图片 ---------- */
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+
+            /* 白底示意图（如 images/ggg.png）在暗色下保留白底，避免看不清 */
+            img {
+                background: #fff;
+            }
+        }
+
+        /* ---------- 降低动态效果 ---------- */
+        @media (prefers-reduced-motion: reduce) {
+            body {
+                transition: none;
+            }
+        }
+
+        /* ---------- 打印 ---------- */
+        @media print {
+            :root {
+                --bg: #fff;
+                --fg: #000;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -317,7 +515,6 @@
     <p>分析到这里明眼人就明白了这里又要出一大堆错层。</p>
     <p class="math">\begin{array}{l}
         (0)(1^{(2)(2)})(1^{(3)})(3^{(4)(4)}) = \text{0 ,,1 2 1 2,,1 3,,1 2,,1 31 42,,1 52,,1} \\
-        \\
         (0)(1^{(2)(2)})(1^{(3)})(3^{(4)(4)})(3) = \text{0 ,,1 2 1 2,,1 3,,1 2,,1 31 42,,1 52,,1 3 } \\
         (0)(1^{(2)(2)})(1^{(3)})(3^{(4)(4)})(3,1) = \text{0 ,,1 2 1 2,,1 3,,1 2,,1 31 42,,1 52,,1 31 } \\
         (0)(1^{(2)(2)})(1^{(3)})(3^{(4)(4)})(3,1^{(5)}) = \text{0 ,,1 2 1 2,,1 3,,1 2,,1 31 42,,1 52,,1 31 2,,1} \\
@@ -375,16 +572,20 @@
         (0)(1^{(2,1)})= \text{0 ,,1 2 1 2,,1 3,,1 41} \\
         \end{array}</p>
     <p>至此朴素TBMS的使命结束了。然而0 ,,1 2 1 2,,1 3,,1 41 2,,1又会产生一次提升……BTBMS能解决这些问题吗？</p>
-    <p class="warn">正文正式开始</p>
+    <p class="warn">正片开始</p>
     <h2>BTBMS的(1,1,1)传染上标</h2>
     <p>看ωMN准备了什么：0 ,,1 2 1 2,,1 3,,1 41 2,,1会展开成0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 [521] 321 432,,1 532,,1
         [6321]……，展开结果硬是把TBMS搓成了类似于(0)(1)(2,1<sup>Ω</sup>)(2,1)(3,2,1<sup>Ω<sub>ω</sub></sup>)(3,2,1)(4,3,2,1<sup>3-row
             Non Recursive
             BMS
             Limit</sup>)……的东西，而且这下面甚至还有提升。</p>
+    <p>0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 52 321的321会把52提升到63, 74, ……可以看出来BMS的普通提升在这里又发力了。</p>
     <p>再看BTBMS准备了什么：<span class="math">(0)(1^{(2,1)})(1,1,1)</span>的展开是<span
-            class="math">(0)(1^{(2,1)})(1,1)(3^{(4,3)})(3,3)(5^{(6,5)})</span>，是类似于(0)(1<sup>Ω</sup>)(1,1)(2<sup>Ω<sub>2</sub></sup>)(2,2)(3<sup>Ω<sub>3</sub></sup>)的东西，可以看出来BTBMS有提升。
+            class="math">(0)(1^{(2,1)})(1,1)(3^{(4,3)})(3,3)(5^{(6,5)})</span>，是类似于(0)(1<sup>Ω</sup>)(1,1)(2<sup>Ω<sub>2</sub></sup>)(2,2)(3<sup>Ω<sub>3</sub></sup>)的东西，这与0
+        ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 52 321相似。
     </p>
+    <p>此处分析有许多极其诡异的错层，包括但不限于<span
+            class="math">(0)(1^{(2,1)})(1,1,1)(3^{(4,1)(5^{(6,5)(5,5,5)(7^{(8,5)})})})</span>这种超级诡异的式子</p>
     <p class="math">\begin{array}{l}
 
         (0)(1^{(2,1)}) = \text{0 ,,1 2 1 2,,1 3,,1 41}\\
@@ -393,14 +594,73 @@
         (0)(1^{(2,1)})(1,1)(3^{(4)}) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1}\\
         (0)(1^{(2,1)})(1,1)(3^{(4)(4)}) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1}\\
         (0)(1^{(2,1)})(1,1)(3^{(4,1)}) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 51}\\
-        (0)(1^{(2,1)})(1,1)(3^{(4,3)}) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 52}\\
+        (0)(1^{(2,1)})(1,1)(3^{(4,1)(4)}) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 51 42,,1} = (\W\w)\text{-row
+        TBMS}\\
+        (0)(1^{(2,1)})(1,1)(3^{(4,1)(4,1)}) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 51 51} = \W^2\text{-row
+        TBMS}\\
+        (0)(1^{(2,1)})(1,1)(3^{(4,1)(5,1)}) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 51 61} = \W^\W\text{-row
+        TBMS}\\
+        (0)(1^{(2,1)})(1,1)(3^{(4,1)(5,5)}) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 51 62} =
+        \psi_1(\W_2)\text{-row
+        TBMS}\\
+        (0)(1^{(2,1)})(1,1)(3^{(4,1)(5,5,5)}) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 51 621} =
+        \psi_1(\W_\w)\text{-row
+        TBMS}\\
+        (0)(1^{(2,1)})(1,1)(3^{(4,1)(5^{(6)})}) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 51 62,,1} =
+        \psi_1(ω\text{-row Non Rec. TBMS})\text{-row
+        TBMS}\\
+        (0)(1^{(2,1)})(1,1)(3^{(4,3)}) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 52} = \W_2\text{-row TBMS}\\
         (0)(1^{(2,1)})(1,1)(3^{(4,3)})(3) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 52 3}\\
         (0)(1^{(2,1)})(1,1)(3^{(4,3)})(3,3) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 52 32}\\
         (0)(1^{(2,1)})(1,1)(3^{(4,3)})(3,3)(5^{(6,5)}) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 52 32 43,,1 53,,1
-        63}\\
+        63} = \W_3\text{-row TBMS}\\
         (0)(1^{(2,1)})(1,1)(3^{(4,3)})(3,3)(5^{(6,5)})(5,5)(7^{(8,7)}) = \text{
-        0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 52 32 43,,1 53,,1 63 43 54,,1 64,,1 74}\\
-        (0)(1^{(2,1)})(1,1,1) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 52 321}\\
+        0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 52 32 43,,1 53,,1 63 43 54,,1 64,,1 74} = \W_4\text{-row TBMS}\\
+        (0)(1^{(2,1)})(1,1,1) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 52 321} = \W_\w\text{-row TBMS}\\
+        (0)(1^{(2,1)})(1,1,1)(3^{(4)}) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 52 321 432,,1} \\
+        (0)(1^{(2,1)})(1,1,1)(3^{(4)(4)}) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 52 321 432,,1 532,,1} \\
+        (0)(1^{(2,1)})(1,1,1)(3^{(4,1)}) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 52 321 432,,1 532,,1 61} \\
+        (0)(1^{(2,1)})(1,1,1)(3^{(4,1)(5^{(6,5)})}) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 52 321 432,,1 532,,1
+        61 72,,1 82,,1 92} \\
+        (0)(1^{(2,1)})(1,1,1)(3^{(4,1)(5^{(6,5)(5,5,5)(7^{(8)(8)})})}) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 52
+        321 432,,1 532,,1 61 72,,1 82,,1 92 721 832,,1 932,,1} \\
+        (0)(1^{(2,1)})(1,1,1)(3^{(4,1)(5^{(6,5)(5,5,5)(7^{(8,1)(9^{(10,9)(9,9,9)(11^{(12)(12)})})})})}) = \text{0 ,,1 2
+        1 2,,1 3,,1 41 21 32,,1 42,,1 52
+        321 432,,1 532,,1 61 72,,1 82,,1 92 721 832,,1 932,,1 (10)1 (11)2,,1 (12)2,,1 (13)2 (11)21 (12)32,,1 (13)32,,1}
+        \\
+        (0)(1^{(2,1)})(1,1,1)(3^{(4,1)(5^{(6,5)(5,5,5)(7^{(8,5)})})}) = \text{0 ,,1 2
+        1 2,,1 3,,1 41 21 32,,1 42,,1 52
+        321 432,,1 532,,1 62}
+        \\
+        (0)(1^{(2,1)})(1,1,1)(3^{(4,1)(5^{(6,5)(5,5,5)(7^{(8,5)(9)})})}) = \text{0 ,,1 2
+        1 2,,1 3,,1 41 21 32,,1 42,,1 52
+        321 432,,1 532,,1 62 7}
+        \\
+        (0)(1^{(2,1)})(1,1,1)(3^{(4,1)(5^{(6,5)(5,5,5)(7^{(8,5)(9,5)})})}) = \text{0 ,,1 2
+        1 2,,1 3,,1 41 21 32,,1 42,,1 52
+        321 432,,1 532,,1 62 72}
+        \\
+        (0)(1^{(2,1)})(1,1,1)(3^{(4,1)(5^{(6,5)(5,5,5)(7^{(8,5)(9,9)})})}) = \text{0 ,,1 2
+        1 2,,1 3,,1 41 21 32,,1 42,,1 52
+        321 432,,1 532,,1 62 73}
+        \\
+        (0)(1^{(2,1)})(1,1,1)(3^{(4,1)(5^{(6,5)(5,5,5)(7^{(8,5)(9^{(10)})})})}) = \text{0 ,,1 2
+        1 2,,1 3,,1 41 21 32,,1 42,,1 52
+        321 432,,1 532,,1 62 73,,1}
+        \\
+        (0)(1^{(2,1)})(1,1,1)(3^{(4,1)(5^{(6,5)(5,5,5)(7^{(8,5)(9^{(10,1)})})})}) = \text{0 ,,1 2
+        1 2,,1 3,,1 41 21 32,,1 42,,1 52
+        321 432,,1 532,,1 62 73,,1 83,,1 91}
+        \\
+        (0)(1^{(2,1)})(1,1,1)(3^{(4,1)(5^{(6,5)(5,5,5)(7^{(8,5)(9^{(10,5)})})})}) = \text{0 ,,1 2
+        1 2,,1 3,,1 41 21 32,,1 42,,1 52
+        321 432,,1 532,,1 62 73,,1 83,,1 92}
+        \\
+        (0)(1^{(2,1)})(1,1,1)(3^{(4,1)(5^{(6,5)(5,5,5)(7^{(8,5)(9^{(10,9)})})})}) = \text{0 ,,1 2
+        1 2,,1 3,,1 41 21 32,,1 42,,1 52
+        321 432,,1 532,,1 62 73,,1 83,,1 93}
+        \\
+        (0)(1^{(2,1)})(1,1,1)(3^{(4,1,1)}) = \text{0 ,,1 2 1 2,,1 3,,1 41 21 32,,1 42,,1 52 321 432,,1 532,,1 621} \\
         \end{array}</p>
 
     <h1>附录</h1>
@@ -533,204 +793,7 @@ variance万兵手，命若黄泉不回头！
     <p>2026/10/28: 话说BTBMS里的(0)(1^(2,1))(1,1,1)(3^(4,1,1))是什么万一 半夜森系被这卡住</p>
     <script src="https://unpkg.com/katex@0.16.28/dist/katex.min.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://unpkg.com/katex@0.16.28/dist/katex.min.css" crossorigin="anonymous">
-    <style>
-        /* ---------- 主题变量 ---------- */
-        :root {
-            color-scheme: light dark;
 
-            --bg: #ffffff;
-            --bg-alt: #f6f8fa;
-            --fg: #1f2328;
-            --fg-muted: #57606a;
-            --link: #0a58ca;
-            --link-visited: #6f42c1;
-            --border: #d0d7de;
-            --warn: #b42318;
-            --code-bg: #f6f8fa;
-            --code-fg: #1f2328;
-            --selection: #b6d7ff;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg: #0d1117;
-                --bg-alt: #161b22;
-                --fg: #e6edf3;
-                --fg-muted: #9198a1;
-                --link: #6cb6ff;
-                --link-visited: #d2a8ff;
-                --border: #30363d;
-                --warn: #ff7b72;
-                --code-bg: #161b22;
-                --code-fg: #e6edf3;
-                --selection: #264f78;
-            }
-        }
-
-        /* ---------- 基础 ---------- */
-        html {
-            background: var(--bg);
-        }
-
-        body {
-            background: var(--bg);
-            color: var(--fg);
-            margin: 0 auto;
-            max-width: 900px;
-            padding: 1.5rem 1.25rem 4rem;
-            line-height: 1.7;
-            font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans SC", sans-serif;
-            transition: background-color .2s ease, color .2s ease;
-        }
-
-        ::selection {
-            background: var(--selection);
-        }
-
-        /* ---------- 标题 ---------- */
-        h1,
-        h2,
-        h3,
-        h4 {
-            color: var(--fg);
-            line-height: 1.3;
-        }
-
-        h1 {
-            border-bottom: 1px solid var(--border);
-            padding-bottom: .3em;
-        }
-
-        h2 {
-            border-bottom: 1px solid var(--border);
-            padding-bottom: .25em;
-            margin-top: 2em;
-        }
-
-        h3,
-        h4 {
-            margin-top: 1.5em;
-        }
-
-        /* ---------- 链接 ---------- */
-        a {
-            color: var(--link);
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        a:visited {
-            color: var(--link-visited);
-        }
-
-        /* ---------- 分隔线 ---------- */
-        hr {
-            border: 0;
-            border-top: 1px solid var(--border);
-            margin: 2em 0;
-        }
-
-        /* ---------- 代码 / 预格式 ---------- */
-        code,
-        pre,
-        .math,
-        .expr-display {
-            font-family: ui-monospace, SFMono-Regular, "Cascadia Code", Consolas, monospace;
-        }
-
-        code {
-            background: var(--code-bg);
-            color: var(--code-fg);
-            padding: .15em .35em;
-            border-radius: 4px;
-            font-size: .9em;
-        }
-
-        pre {
-            background: var(--code-bg);
-            color: var(--code-fg);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: .9em 1em;
-            overflow-x: auto;
-            line-height: 1.5;
-            font-size: .875em;
-        }
-
-        /* ---------- 公式 / 表达式 ---------- */
-        .math {
-            color: var(--fg);
-        }
-
-        /* KaTeX 渲染出的块级公式允许横向滚动，避免长 array 溢出 */
-        .katex-display {
-            overflow-x: auto;
-            overflow-y: hidden;
-            padding: .4em 0;
-        }
-
-        .expr-display {
-            display: inline-block;
-            max-width: 100%;
-            overflow-x: auto;
-            vertical-align: middle;
-            font-size: .9em;
-            background: var(--bg-alt);
-            border-radius: 4px;
-            padding: 0 .3em;
-        }
-
-        /* ---------- 提示 / 警告 ---------- */
-        .warn {
-            color: var(--warn) !important;
-        }
-
-        /* ---------- details ---------- */
-        details {
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: .5em .8em;
-            background: var(--bg-alt);
-        }
-
-        summary {
-            cursor: pointer;
-            color: var(--fg);
-        }
-
-        /* ---------- 图片 ---------- */
-        img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 4px;
-        }
-
-        @media (prefers-color-scheme: dark) {
-
-            /* 白底示意图（如 images/ggg.png）在暗色下保留白底，避免看不清 */
-            img {
-                background: #fff;
-            }
-        }
-
-        /* ---------- 降低动态效果 ---------- */
-        @media (prefers-reduced-motion: reduce) {
-            body {
-                transition: none;
-            }
-        }
-
-        /* ---------- 打印 ---------- */
-        @media print {
-            :root {
-                --bg: #fff;
-                --fg: #000;
-            }
-        }
-    </style>
 </body>
 
 <script>
