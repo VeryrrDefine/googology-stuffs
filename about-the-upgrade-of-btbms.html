@@ -202,6 +202,88 @@
                 --fg: #000;
             }
         }
+
+        /* ---------- 表格 ---------- */
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            /* 窄屏横向滚动，不撑破页面 */
+            -webkit-overflow-scrolling: touch;
+            margin: 1.2em 0;
+            border-radius: 6px;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 100%;
+            min-width: 480px;
+            /* 太窄时允许滚动，而不是硬挤 */
+            font-size: .925em;
+            background: var(--bg);
+            color: var(--fg);
+        }
+
+        caption {
+            caption-side: top;
+            text-align: left;
+            color: var(--fg-muted);
+            font-size: .875em;
+            padding: .3em .2em .6em;
+        }
+
+        th,
+        td {
+            border: 1px solid var(--border);
+            padding: .5em .75em;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        thead th {
+            background: var(--bg-alt);
+            font-weight: 600;
+            white-space: nowrap;
+            /* 表头尽量不换行 */
+        }
+
+        tbody tr:nth-child(even) {
+            background: var(--bg-alt);
+            /* 斑马纹 */
+        }
+
+        tbody tr:hover {
+            background: color-mix(in srgb, var(--link) 8%, transparent);
+        }
+
+        /* 表格里的代码 / 公式 */
+        td code,
+        th code {
+            white-space: nowrap;
+            /* 序列不折行，配合外层滚动 */
+            font-size: .875em;
+        }
+
+        /* 数字列右对齐（可选，给需要的列加 class） */
+        .num {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        /* 深色模式下斑马纹对比度略提一档 */
+        @media (prefers-color-scheme: dark) {
+            tbody tr:nth-child(even) {
+                background: #1a2029;
+            }
+
+            tbody tr:hover {
+                background: rgba(108, 182, 255, .10);
+            }
+        }
     </style>
 </head>
 
@@ -234,26 +316,57 @@
     <p>实际上目前还没人知道BTBMS极限为什么能超过1,3,9，甚至ω-Y极限，这是一个值得探讨的问题。</p>
     <h2>良序性</h2>
     <p>BTBMS在<span class="math">\mathrm{ZFC}+\exists n-\mathsf{Mahlo}</span>下是良序的。</p>
-    <h3>其他记号的良序</h3>
-    <ul>
-        <li>BMS,良序证明作者存在争议 , 现有证明表明<span class="math">\mathrm{BMSLimit}\le \operatorname{PTO}(\mathrm{Z}_2)</span>。</li>
-        <li>1-Y,良序证明作者为test_alpha0和Phyrion [使用了GPT], 现有证明表明<span class="math">\mathrm{1-YLimit}\lt
-                \operatorname{PTO}(\mathrm{KP}\omega+\exists
-                \omega_1)</span>。
-        </li>
-        <li>ω-Y,良序证明作者为test_alpha0和Phyrion [使用了GPT], 现有证明表明<span class="math">\mathrm{ω-YLimit}\lt
-                \operatorname{PTO}(\mathrm{KP}\omega+\exists
-                \omega_1)</span>。
-        </li>
-        <li>ε<sub>0</sub>MN,良序证明作者为test_alpha0 [使用了GPT], 现有证明表明<span class="math">ε_0\mathrm{MN}\lt
-                \operatorname{PTO}(\mathrm{KP}\omega+\exists
-                \omega_1)</span>。
-        </li>
-        <li>iblp,良序证明作者为test_alpha0 [使用了GPT], 现有证明表明<span class="math">\mathrm{iblp}\lt
-                \operatorname{PTO}(\mathrm{ZFC}+\mathrm{I3})</span>，可能<span class="math">\lt
-                \operatorname{PTO}(\mathrm{ZFC}+0^{\sharp})</span>。
-        </li>
-    </ul>
+    <h3>其他记号参考</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>记号名</th>
+                <th>作者</th>
+                <th>PTO上界</th>
+                <th>备注</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>BMS (ver. 4)</td>
+                <td>Bashicu</td>
+                <td><span class="math">\le \operatorname{PTO}(\mathrm{Z}_2)</span></td>
+                <td>良序。</td>
+            </tr>
+            <tr>
+                <td>1-Y</td>
+                <td>Yukito</td>
+                <td><span class="math">\lt \operatorname{PTO}(\mathrm{KP}+\exists\omega_1)</span></td>
+                <td>可能有Naruyoko参与记号定义；良序。</td>
+            </tr>
+            <tr>
+                <td>ω-Y</td>
+                <td>Yukito</td>
+                <td><span class="math">\lt \operatorname{PTO}(\mathrm{KP}+\exists\omega_1)</span></td>
+                <td>可能有Naruyoko参与记号定义；良序。</td>
+            </tr>
+            <tr>
+                <td>ωMN</td>
+                <td>Hyp Cos</td>
+                <td>?</td>
+                <td>(0)(,,,1)上存在不理想表达式；未证明良序。</td>
+            </tr>
+            <tr>
+                <td>iblp</td>
+                <td>test_alpha0</td>
+                <td><span class="math">\lt \operatorname{PTO}(\mathrm{ZFC}+\mathrm{I3})</span></td>
+                <td>良序；可能<span class="math">\lt \operatorname{PTO}(\mathrm{ZFC}+0^{\sharp})</span>。
+                </td>
+            </tr>
+            <tr>
+                <td>BLBMS</td>
+                <td>142857cs</td>
+                <td><span class="math">\lt \operatorname{PTO}(\mathrm{ZFC}+0^{\sharp})</span></td>
+                <td>良序。
+                </td>
+            </tr>
+        </tbody>
+    </table>
     <h2>BTBMS相关文章</h2>
     <ul>
 
